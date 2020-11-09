@@ -1,0 +1,3829 @@
+Terminals unused in grammar
+
+   MAP
+   BOOLEAN
+
+
+Grammar
+
+    0 $accept: inicio $end
+
+    1 inicio: Use EnumMess Program
+
+    2 Use: %empty
+
+    3 $@1: %empty
+
+    4 Use: USE IDENTIFIER AS IDENTIFIER ';' $@1 Use
+
+    5 $@2: %empty
+
+    6 Use: USE IDENTIFIER ';' $@2 Use
+
+    7 EnumMess: Message
+    8         | MESSAGE_TYPE '{' EnumMess
+
+    9 $@3: %empty
+
+   10 EnumMess: IDENTIFIER ',' $@3 EnumMess
+
+   11 $@4: %empty
+
+   12 EnumMess: IDENTIFIER '}' ';' $@4 EnumMess
+
+   13 Message: %empty
+
+   14 $@5: %empty
+
+   15 Message: MESSAGE IDENTIFIER '{' Var_List '}' ';' $@5 Message
+
+   16 IdentMsg: %empty
+
+   17 $@6: %empty
+
+   18 $@7: %empty
+
+   19 IdentMsg: IDENTIFIER IDENTIFIER ';' $@6 $@7 IdentMsg
+
+   20 $@8: %empty
+
+   21 $@9: %empty
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+   23 StateDef: %empty
+
+   24 $@10: %empty
+
+   25 $@11: %empty
+
+   26 $@12: %empty
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 '{' ActionList '}' $@12 StateDef
+
+   28 $@13: %empty
+
+   29 State: IDENTIFIER $@13 '(' ExpList ')' ';'
+   30      | EXIT ';'
+
+   31 Const_List: %empty
+
+   32 $@14: %empty
+
+   33 Const_List: CONST IDENTIFIER '=' INT_LITERAL ';' $@14 Const_List
+
+   34 $@15: %empty
+
+   35 Const_List: CONST IDENTIFIER '=' REAL_LITERAL ';' $@15 Const_List
+
+   36 $@16: %empty
+
+   37 Const_List: CONST IDENTIFIER '=' STR_LITERAL ';' $@16 Const_List
+
+   38 Var_List: %empty
+   39         | Simple_Type Var Var_List
+
+   40 $@17: %empty
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' ';' $@17 Var_List
+
+   42 Var: %empty
+   43    | IDENTIFIER ';'
+
+   44 $@18: %empty
+
+   45 Var: IDENTIFIER $@18 ',' Var
+   46    | IDENTIFIER
+   47    | Assignment
+
+   48 Simple_Type: INTEGER
+   49            | REAL
+   50            | STRING
+
+   51 ActionList: %empty
+   52           | Action ActionList
+
+   53 Action: Next_State
+   54       | Broadcast
+   55       | Send
+   56       | Recv
+   57       | During
+   58       | While
+   59       | For
+   60       | If
+   61       | Else
+   62       | Assignment
+   63       | Method_call
+
+   64 Next_State: NEXT_STATE State
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+   67 $@19: %empty
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList '}'
+
+   69 $@20: %empty
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList '}'
+
+   71 $@21: %empty
+
+   72 $@22: %empty
+
+   73 During: DURING $@21 '(' Exp ')' $@22 During_Recv
+
+   74 $@23: %empty
+
+   75 During_Recv: '{' $@23 ActionList '}'
+   76            | Recv
+
+   77 $@24: %empty
+
+   78 $@25: %empty
+
+   79 While: WHILE '(' $@24 Exp ')' $@25 '{' ActionList '}'
+
+   80 $@26: %empty
+
+   81 For: FOR IDENTIFIER IN IDENTIFIER $@26 '{' ActionList '}'
+
+   82 $@27: %empty
+
+   83 $@28: %empty
+
+   84 If: IF $@27 '(' Exp ')' $@28 '{' ActionList '}'
+
+   85 $@29: %empty
+
+   86 Else: ELSE $@29 '{' ActionList '}'
+
+   87 Method_call: Exp ';'
+
+   88 $@30: %empty
+
+   89 Assignment: Exp '=' $@30 Exp ';'
+
+   90 Exp: %empty
+
+   91 $@31: %empty
+
+   92 Exp: IDENTIFIER '.' $@31 Exp
+
+   93 $@32: %empty
+
+   94 Exp: IDENTIFIER $@32 Exp
+
+   95 $@33: %empty
+
+   96 Exp: STR_LITERAL $@33 Exp
+
+   97 $@34: %empty
+
+   98 Exp: INT_LITERAL $@34 Exp
+
+   99 $@35: %empty
+
+  100 Exp: REAL_LITERAL $@35 Exp
+  101    | TRUE_LITERAL
+  102    | FALSE_LITERAL
+
+  103 $@36: %empty
+
+  104 $@37: %empty
+
+  105 Exp: '(' $@36 ExpList ')' $@37 Exp
+  106    | ExprMat Exp
+  107    | ExprBool Exp
+  108    | Incremento Exp
+  109    | SetMsg
+  110    | Entidade Exp
+  111    | List_Func
+
+  112 Incremento: IDENTIFIER DUPLO_MAIS
+  113           | IDENTIFIER DUPLO_MENOS
+
+  114 $@38: %empty
+
+  115 List_Func: IDENTIFIER '.' INSERT $@38 '(' Exp ')'
+  116          | IDENTIFIER '.' SIZE '(' ')'
+  117          | IDENTIFIER '.' NEXT '(' ')'
+  118          | IDENTIFIER '.' FRONT '(' ')'
+  119          | IDENTIFIER '.' BACK '(' ')'
+
+  120 SetMsg: IDENTIFIER POINTER IDENTIFIER
+
+  121 $@39: %empty
+
+  122 Entidade: IDENTIFIER POINTER IDENTIFIER '(' $@39 ExpList ')'
+
+  123 ExprMat: '+'
+  124        | '-'
+  125        | '*'
+  126        | '/'
+
+  127 ExprBool: DUPLO_IGUAL
+  128         | MAIOR_IGUAL
+  129         | MENOR_IGUAL
+  130         | DIFERENTE
+  131         | '>'
+  132         | '<'
+
+  133 ExpList: Exp
+
+  134 $@40: %empty
+
+  135 ExpList: Exp ',' $@40 ExpList
+  136        | Exp ';'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 22 27 29 65 66 68 70 73 79 84 105 115 116 117 118 119 122
+')' (41) 22 27 29 65 66 68 70 73 79 84 105 115 116 117 118 119 122
+'*' (42) 125
+'+' (43) 123
+',' (44) 10 45 65 66 68 70 135
+'-' (45) 124
+'.' (46) 92 115 116 117 118 119
+'/' (47) 126
+';' (59) 4 6 12 15 19 29 30 33 35 37 41 43 65 66 87 89 136
+'<' (60) 41 132
+'=' (61) 33 35 37 89
+'>' (62) 41 131
+'[' (91) 41
+']' (93) 41
+'{' (123) 8 15 22 27 68 70 75 79 81 84 86
+'}' (125) 12 15 22 27 68 70 75 79 81 84 86
+error (256)
+USE (258) 4 6
+AS (259) 4
+PROGRAM (260) 22
+STATE (261) 27
+EXIT (262) 30
+SEND (263) 66
+RECV (264) 68
+BROADCAST (265) 65
+NEXT_STATE (266) 64
+DURING (267) 73
+CONST (268) 33 35 37
+RECV_BROADCAST (269) 70
+INTEGER (270) 48
+REAL (271) 49
+STRING (272) 50
+LIST (273) 41
+MAP (274)
+BOOLEAN (275)
+BACK (276) 119
+FRONT (277) 118
+NEXT (278) 117
+SIZE (279) 116
+INSERT (280) 115
+IF (281) 84
+ELSE (282) 86
+FOR (283) 81
+WHILE (284) 79
+IN (285) 81
+DUPLO_MAIS (286) 112
+DUPLO_MENOS (287) 113
+TRUE_LITERAL (288) 101
+FALSE_LITERAL (289) 102
+POINTER (290) 120 122
+DUPLO_IGUAL (291) 127
+DIFERENTE (292) 130
+MAIOR_IGUAL (293) 128
+MENOR_IGUAL (294) 129
+MESSAGE_TYPE (295) 8
+MESSAGE (296) 15
+IDENTIFIER (297) 4 6 10 12 15 19 22 27 29 33 35 37 41 43 45 46 65 66
+    68 70 81 92 94 112 113 115 116 117 118 119 120 122
+STR_LITERAL (298) 37 96
+INT_LITERAL (299) 33 41 98
+REAL_LITERAL (300) 35 100
+
+
+Nonterminals, with rules where they appear
+
+$accept (62)
+    on left: 0
+inicio (63)
+    on left: 1, on right: 0
+Use (64)
+    on left: 2 4 6, on right: 1 4 6
+$@1 (65)
+    on left: 3, on right: 4
+$@2 (66)
+    on left: 5, on right: 6
+EnumMess (67)
+    on left: 7 8 10 12, on right: 1 8 10 12
+$@3 (68)
+    on left: 9, on right: 10
+$@4 (69)
+    on left: 11, on right: 12
+Message (70)
+    on left: 13 15, on right: 7 15
+$@5 (71)
+    on left: 14, on right: 15
+IdentMsg (72)
+    on left: 16 19, on right: 19 22
+$@6 (73)
+    on left: 17, on right: 19
+$@7 (74)
+    on left: 18, on right: 19
+Program (75)
+    on left: 22, on right: 1
+$@8 (76)
+    on left: 20, on right: 22
+$@9 (77)
+    on left: 21, on right: 22
+StateDef (78)
+    on left: 23 27, on right: 22 27
+$@10 (79)
+    on left: 24, on right: 27
+$@11 (80)
+    on left: 25, on right: 27
+$@12 (81)
+    on left: 26, on right: 27
+State (82)
+    on left: 29 30, on right: 64
+$@13 (83)
+    on left: 28, on right: 29
+Const_List (84)
+    on left: 31 33 35 37, on right: 22 33 35 37
+$@14 (85)
+    on left: 32, on right: 33
+$@15 (86)
+    on left: 34, on right: 35
+$@16 (87)
+    on left: 36, on right: 37
+Var_List (88)
+    on left: 38 39 41, on right: 15 22 27 39 41
+$@17 (89)
+    on left: 40, on right: 41
+Var (90)
+    on left: 42 43 45 46 47, on right: 39 45
+$@18 (91)
+    on left: 44, on right: 45
+Simple_Type (92)
+    on left: 48 49 50, on right: 39 41
+ActionList (93)
+    on left: 51 52, on right: 27 52 68 70 75 79 81 84 86
+Action (94)
+    on left: 53 54 55 56 57 58 59 60 61 62 63, on right: 52
+Next_State (95)
+    on left: 64, on right: 53
+Broadcast (96)
+    on left: 65, on right: 54
+Send (97)
+    on left: 66, on right: 55
+Recv (98)
+    on left: 68 70, on right: 56 76
+$@19 (99)
+    on left: 67, on right: 68
+$@20 (100)
+    on left: 69, on right: 70
+During (101)
+    on left: 73, on right: 57
+$@21 (102)
+    on left: 71, on right: 73
+$@22 (103)
+    on left: 72, on right: 73
+During_Recv (104)
+    on left: 75 76, on right: 73
+$@23 (105)
+    on left: 74, on right: 75
+While (106)
+    on left: 79, on right: 58
+$@24 (107)
+    on left: 77, on right: 79
+$@25 (108)
+    on left: 78, on right: 79
+For (109)
+    on left: 81, on right: 59
+$@26 (110)
+    on left: 80, on right: 81
+If (111)
+    on left: 84, on right: 60
+$@27 (112)
+    on left: 82, on right: 84
+$@28 (113)
+    on left: 83, on right: 84
+Else (114)
+    on left: 86, on right: 61
+$@29 (115)
+    on left: 85, on right: 86
+Method_call (116)
+    on left: 87, on right: 63
+Assignment (117)
+    on left: 89, on right: 47 62
+$@30 (118)
+    on left: 88, on right: 89
+Exp (119)
+    on left: 90 92 94 96 98 100 101 102 105 106 107 108 109 110 111,
+    on right: 73 79 84 87 89 92 94 96 98 100 105 106 107 108 110 115
+    133 135 136
+$@31 (120)
+    on left: 91, on right: 92
+$@32 (121)
+    on left: 93, on right: 94
+$@33 (122)
+    on left: 95, on right: 96
+$@34 (123)
+    on left: 97, on right: 98
+$@35 (124)
+    on left: 99, on right: 100
+$@36 (125)
+    on left: 103, on right: 105
+$@37 (126)
+    on left: 104, on right: 105
+Incremento (127)
+    on left: 112 113, on right: 108
+List_Func (128)
+    on left: 115 116 117 118 119, on right: 111
+$@38 (129)
+    on left: 114, on right: 115
+SetMsg (130)
+    on left: 120, on right: 109
+Entidade (131)
+    on left: 122, on right: 110
+$@39 (132)
+    on left: 121, on right: 122
+ExprMat (133)
+    on left: 123 124 125 126, on right: 106
+ExprBool (134)
+    on left: 127 128 129 130 131 132, on right: 107
+ExpList (135)
+    on left: 133 135 136, on right: 29 105 122 135
+$@40 (136)
+    on left: 134, on right: 135
+
+
+State 0
+
+    0 $accept: . inicio $end
+
+    USE  shift, and go to state 1
+
+    $default  reduce using rule 2 (Use)
+
+    inicio  go to state 2
+    Use     go to state 3
+
+
+State 1
+
+    4 Use: USE . IDENTIFIER AS IDENTIFIER ';' $@1 Use
+    6    | USE . IDENTIFIER ';' $@2 Use
+
+    IDENTIFIER  shift, and go to state 4
+
+
+State 2
+
+    0 $accept: inicio . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 inicio: Use . EnumMess Program
+
+    MESSAGE_TYPE  shift, and go to state 6
+    MESSAGE       shift, and go to state 7
+    IDENTIFIER    shift, and go to state 8
+
+    $default  reduce using rule 13 (Message)
+
+    EnumMess  go to state 9
+    Message   go to state 10
+
+
+State 4
+
+    4 Use: USE IDENTIFIER . AS IDENTIFIER ';' $@1 Use
+    6    | USE IDENTIFIER . ';' $@2 Use
+
+    AS   shift, and go to state 11
+    ';'  shift, and go to state 12
+
+
+State 5
+
+    0 $accept: inicio $end .
+
+    $default  accept
+
+
+State 6
+
+    8 EnumMess: MESSAGE_TYPE . '{' EnumMess
+
+    '{'  shift, and go to state 13
+
+
+State 7
+
+   15 Message: MESSAGE . IDENTIFIER '{' Var_List '}' ';' $@5 Message
+
+    IDENTIFIER  shift, and go to state 14
+
+
+State 8
+
+   10 EnumMess: IDENTIFIER . ',' $@3 EnumMess
+   12         | IDENTIFIER . '}' ';' $@4 EnumMess
+
+    ','  shift, and go to state 15
+    '}'  shift, and go to state 16
+
+
+State 9
+
+    1 inicio: Use EnumMess . Program
+
+    PROGRAM  shift, and go to state 17
+
+    Program  go to state 18
+
+
+State 10
+
+    7 EnumMess: Message .
+
+    $default  reduce using rule 7 (EnumMess)
+
+
+State 11
+
+    4 Use: USE IDENTIFIER AS . IDENTIFIER ';' $@1 Use
+
+    IDENTIFIER  shift, and go to state 19
+
+
+State 12
+
+    6 Use: USE IDENTIFIER ';' . $@2 Use
+
+    $default  reduce using rule 5 ($@2)
+
+    $@2  go to state 20
+
+
+State 13
+
+    8 EnumMess: MESSAGE_TYPE '{' . EnumMess
+
+    MESSAGE_TYPE  shift, and go to state 6
+    MESSAGE       shift, and go to state 7
+    IDENTIFIER    shift, and go to state 8
+
+    $default  reduce using rule 13 (Message)
+
+    EnumMess  go to state 21
+    Message   go to state 10
+
+
+State 14
+
+   15 Message: MESSAGE IDENTIFIER . '{' Var_List '}' ';' $@5 Message
+
+    '{'  shift, and go to state 22
+
+
+State 15
+
+   10 EnumMess: IDENTIFIER ',' . $@3 EnumMess
+
+    $default  reduce using rule 9 ($@3)
+
+    $@3  go to state 23
+
+
+State 16
+
+   12 EnumMess: IDENTIFIER '}' . ';' $@4 EnumMess
+
+    ';'  shift, and go to state 24
+
+
+State 17
+
+   22 Program: PROGRAM . IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    IDENTIFIER  shift, and go to state 25
+
+
+State 18
+
+    1 inicio: Use EnumMess Program .
+
+    $default  reduce using rule 1 (inicio)
+
+
+State 19
+
+    4 Use: USE IDENTIFIER AS IDENTIFIER . ';' $@1 Use
+
+    ';'  shift, and go to state 26
+
+
+State 20
+
+    6 Use: USE IDENTIFIER ';' $@2 . Use
+
+    USE  shift, and go to state 1
+
+    $default  reduce using rule 2 (Use)
+
+    Use  go to state 27
+
+
+State 21
+
+    8 EnumMess: MESSAGE_TYPE '{' EnumMess .
+
+    $default  reduce using rule 8 (EnumMess)
+
+
+State 22
+
+   15 Message: MESSAGE IDENTIFIER '{' . Var_List '}' ';' $@5 Message
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+    LIST     shift, and go to state 31
+
+    $default  reduce using rule 38 (Var_List)
+
+    Var_List     go to state 32
+    Simple_Type  go to state 33
+
+
+State 23
+
+   10 EnumMess: IDENTIFIER ',' $@3 . EnumMess
+
+    MESSAGE_TYPE  shift, and go to state 6
+    MESSAGE       shift, and go to state 7
+    IDENTIFIER    shift, and go to state 8
+
+    $default  reduce using rule 13 (Message)
+
+    EnumMess  go to state 34
+    Message   go to state 10
+
+
+State 24
+
+   12 EnumMess: IDENTIFIER '}' ';' . $@4 EnumMess
+
+    $default  reduce using rule 11 ($@4)
+
+    $@4  go to state 35
+
+
+State 25
+
+   22 Program: PROGRAM IDENTIFIER . $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    $default  reduce using rule 20 ($@8)
+
+    $@8  go to state 36
+
+
+State 26
+
+    4 Use: USE IDENTIFIER AS IDENTIFIER ';' . $@1 Use
+
+    $default  reduce using rule 3 ($@1)
+
+    $@1  go to state 37
+
+
+State 27
+
+    6 Use: USE IDENTIFIER ';' $@2 Use .
+
+    $default  reduce using rule 6 (Use)
+
+
+State 28
+
+   48 Simple_Type: INTEGER .
+
+    $default  reduce using rule 48 (Simple_Type)
+
+
+State 29
+
+   49 Simple_Type: REAL .
+
+    $default  reduce using rule 49 (Simple_Type)
+
+
+State 30
+
+   50 Simple_Type: STRING .
+
+    $default  reduce using rule 50 (Simple_Type)
+
+
+State 31
+
+   41 Var_List: LIST . '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' ';' $@17 Var_List
+
+    '<'  shift, and go to state 38
+
+
+State 32
+
+   15 Message: MESSAGE IDENTIFIER '{' Var_List . '}' ';' $@5 Message
+
+    '}'  shift, and go to state 39
+
+
+State 33
+
+   39 Var_List: Simple_Type . Var Var_List
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 48
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    '='       reduce using rule 90 (Exp)
+    $default  reduce using rule 42 (Var)
+
+    Var         go to state 57
+    Assignment  go to state 58
+    Exp         go to state 59
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 34
+
+   10 EnumMess: IDENTIFIER ',' $@3 EnumMess .
+
+    $default  reduce using rule 10 (EnumMess)
+
+
+State 35
+
+   12 EnumMess: IDENTIFIER '}' ';' $@4 . EnumMess
+
+    MESSAGE_TYPE  shift, and go to state 6
+    MESSAGE       shift, and go to state 7
+    IDENTIFIER    shift, and go to state 8
+
+    $default  reduce using rule 13 (Message)
+
+    EnumMess  go to state 66
+    Message   go to state 10
+
+
+State 36
+
+   22 Program: PROGRAM IDENTIFIER $@8 . '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    '('  shift, and go to state 67
+
+
+State 37
+
+    4 Use: USE IDENTIFIER AS IDENTIFIER ';' $@1 . Use
+
+    USE  shift, and go to state 1
+
+    $default  reduce using rule 2 (Use)
+
+    Use  go to state 68
+
+
+State 38
+
+   41 Var_List: LIST '<' . Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' ';' $@17 Var_List
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+
+    Simple_Type  go to state 69
+
+
+State 39
+
+   15 Message: MESSAGE IDENTIFIER '{' Var_List '}' . ';' $@5 Message
+
+    ';'  shift, and go to state 70
+
+
+State 40
+
+  101 Exp: TRUE_LITERAL .
+
+    $default  reduce using rule 101 (Exp)
+
+
+State 41
+
+  102 Exp: FALSE_LITERAL .
+
+    $default  reduce using rule 102 (Exp)
+
+
+State 42
+
+  127 ExprBool: DUPLO_IGUAL .
+
+    $default  reduce using rule 127 (ExprBool)
+
+
+State 43
+
+  130 ExprBool: DIFERENTE .
+
+    $default  reduce using rule 130 (ExprBool)
+
+
+State 44
+
+  131 ExprBool: '>' .
+
+    $default  reduce using rule 131 (ExprBool)
+
+
+State 45
+
+  132 ExprBool: '<' .
+
+    $default  reduce using rule 132 (ExprBool)
+
+
+State 46
+
+  128 ExprBool: MAIOR_IGUAL .
+
+    $default  reduce using rule 128 (ExprBool)
+
+
+State 47
+
+  129 ExprBool: MENOR_IGUAL .
+
+    $default  reduce using rule 129 (ExprBool)
+
+
+State 48
+
+   43 Var: IDENTIFIER . ';'
+   45    | IDENTIFIER . $@18 ',' Var
+   46    | IDENTIFIER .
+   92 Exp: IDENTIFIER . '.' $@31 Exp
+   94    | IDENTIFIER . $@32 Exp
+  112 Incremento: IDENTIFIER . DUPLO_MAIS
+  113           | IDENTIFIER . DUPLO_MENOS
+  115 List_Func: IDENTIFIER . '.' INSERT $@38 '(' Exp ')'
+  116          | IDENTIFIER . '.' SIZE '(' ')'
+  117          | IDENTIFIER . '.' NEXT '(' ')'
+  118          | IDENTIFIER . '.' FRONT '(' ')'
+  119          | IDENTIFIER . '.' BACK '(' ')'
+  120 SetMsg: IDENTIFIER . POINTER IDENTIFIER
+  122 Entidade: IDENTIFIER . POINTER IDENTIFIER '(' $@39 ExpList ')'
+
+    DUPLO_MAIS   shift, and go to state 71
+    DUPLO_MENOS  shift, and go to state 72
+    POINTER      shift, and go to state 73
+    '.'          shift, and go to state 74
+    ';'          shift, and go to state 75
+
+    STATE     reduce using rule 46 (Var)
+    INTEGER   reduce using rule 46 (Var)
+    REAL      reduce using rule 46 (Var)
+    STRING    reduce using rule 46 (Var)
+    LIST      reduce using rule 46 (Var)
+    ','       reduce using rule 44 ($@18)
+    '}'       reduce using rule 46 (Var)
+    ')'       reduce using rule 46 (Var)
+    $default  reduce using rule 93 ($@32)
+
+    $@18  go to state 76
+    $@32  go to state 77
+
+
+State 49
+
+   96 Exp: STR_LITERAL . $@33 Exp
+
+    $default  reduce using rule 95 ($@33)
+
+    $@33  go to state 78
+
+
+State 50
+
+   98 Exp: INT_LITERAL . $@34 Exp
+
+    $default  reduce using rule 97 ($@34)
+
+    $@34  go to state 79
+
+
+State 51
+
+  100 Exp: REAL_LITERAL . $@35 Exp
+
+    $default  reduce using rule 99 ($@35)
+
+    $@35  go to state 80
+
+
+State 52
+
+  105 Exp: '(' . $@36 ExpList ')' $@37 Exp
+
+    $default  reduce using rule 103 ($@36)
+
+    $@36  go to state 81
+
+
+State 53
+
+  123 ExprMat: '+' .
+
+    $default  reduce using rule 123 (ExprMat)
+
+
+State 54
+
+  124 ExprMat: '-' .
+
+    $default  reduce using rule 124 (ExprMat)
+
+
+State 55
+
+  125 ExprMat: '*' .
+
+    $default  reduce using rule 125 (ExprMat)
+
+
+State 56
+
+  126 ExprMat: '/' .
+
+    $default  reduce using rule 126 (ExprMat)
+
+
+State 57
+
+   39 Var_List: Simple_Type Var . Var_List
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+    LIST     shift, and go to state 31
+
+    $default  reduce using rule 38 (Var_List)
+
+    Var_List     go to state 82
+    Simple_Type  go to state 33
+
+
+State 58
+
+   47 Var: Assignment .
+
+    $default  reduce using rule 47 (Var)
+
+
+State 59
+
+   89 Assignment: Exp . '=' $@30 Exp ';'
+
+    '='  shift, and go to state 83
+
+
+State 60
+
+  108 Exp: Incremento . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 85
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 61
+
+  111 Exp: List_Func .
+
+    $default  reduce using rule 111 (Exp)
+
+
+State 62
+
+  109 Exp: SetMsg .
+
+    $default  reduce using rule 109 (Exp)
+
+
+State 63
+
+  110 Exp: Entidade . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 86
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 64
+
+  106 Exp: ExprMat . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 87
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 65
+
+  107 Exp: ExprBool . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 88
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 66
+
+   12 EnumMess: IDENTIFIER '}' ';' $@4 EnumMess .
+
+    $default  reduce using rule 12 (EnumMess)
+
+
+State 67
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' . Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+    LIST     shift, and go to state 31
+
+    $default  reduce using rule 38 (Var_List)
+
+    Var_List     go to state 89
+    Simple_Type  go to state 33
+
+
+State 68
+
+    4 Use: USE IDENTIFIER AS IDENTIFIER ';' $@1 Use .
+
+    $default  reduce using rule 4 (Use)
+
+
+State 69
+
+   41 Var_List: LIST '<' Simple_Type . '>' IDENTIFIER '[' INT_LITERAL ']' ';' $@17 Var_List
+
+    '>'  shift, and go to state 90
+
+
+State 70
+
+   15 Message: MESSAGE IDENTIFIER '{' Var_List '}' ';' . $@5 Message
+
+    $default  reduce using rule 14 ($@5)
+
+    $@5  go to state 91
+
+
+State 71
+
+  112 Incremento: IDENTIFIER DUPLO_MAIS .
+
+    $default  reduce using rule 112 (Incremento)
+
+
+State 72
+
+  113 Incremento: IDENTIFIER DUPLO_MENOS .
+
+    $default  reduce using rule 113 (Incremento)
+
+
+State 73
+
+  120 SetMsg: IDENTIFIER POINTER . IDENTIFIER
+  122 Entidade: IDENTIFIER POINTER . IDENTIFIER '(' $@39 ExpList ')'
+
+    IDENTIFIER  shift, and go to state 92
+
+
+State 74
+
+   92 Exp: IDENTIFIER '.' . $@31 Exp
+  115 List_Func: IDENTIFIER '.' . INSERT $@38 '(' Exp ')'
+  116          | IDENTIFIER '.' . SIZE '(' ')'
+  117          | IDENTIFIER '.' . NEXT '(' ')'
+  118          | IDENTIFIER '.' . FRONT '(' ')'
+  119          | IDENTIFIER '.' . BACK '(' ')'
+
+    BACK    shift, and go to state 93
+    FRONT   shift, and go to state 94
+    NEXT    shift, and go to state 95
+    SIZE    shift, and go to state 96
+    INSERT  shift, and go to state 97
+
+    $default  reduce using rule 91 ($@31)
+
+    $@31  go to state 98
+
+
+State 75
+
+   43 Var: IDENTIFIER ';' .
+
+    $default  reduce using rule 43 (Var)
+
+
+State 76
+
+   45 Var: IDENTIFIER $@18 . ',' Var
+
+    ','  shift, and go to state 99
+
+
+State 77
+
+   94 Exp: IDENTIFIER $@32 . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 100
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 78
+
+   96 Exp: STR_LITERAL $@33 . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 101
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 79
+
+   98 Exp: INT_LITERAL $@34 . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 102
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 80
+
+  100 Exp: REAL_LITERAL $@35 . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 103
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 81
+
+  105 Exp: '(' $@36 . ExpList ')' $@37 Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 104
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+    ExpList     go to state 105
+
+
+State 82
+
+   39 Var_List: Simple_Type Var Var_List .
+
+    $default  reduce using rule 39 (Var_List)
+
+
+State 83
+
+   89 Assignment: Exp '=' . $@30 Exp ';'
+
+    $default  reduce using rule 88 ($@30)
+
+    $@30  go to state 106
+
+
+State 84
+
+   92 Exp: IDENTIFIER . '.' $@31 Exp
+   94    | IDENTIFIER . $@32 Exp
+  112 Incremento: IDENTIFIER . DUPLO_MAIS
+  113           | IDENTIFIER . DUPLO_MENOS
+  115 List_Func: IDENTIFIER . '.' INSERT $@38 '(' Exp ')'
+  116          | IDENTIFIER . '.' SIZE '(' ')'
+  117          | IDENTIFIER . '.' NEXT '(' ')'
+  118          | IDENTIFIER . '.' FRONT '(' ')'
+  119          | IDENTIFIER . '.' BACK '(' ')'
+  120 SetMsg: IDENTIFIER . POINTER IDENTIFIER
+  122 Entidade: IDENTIFIER . POINTER IDENTIFIER '(' $@39 ExpList ')'
+
+    DUPLO_MAIS   shift, and go to state 71
+    DUPLO_MENOS  shift, and go to state 72
+    POINTER      shift, and go to state 73
+    '.'          shift, and go to state 74
+
+    $default  reduce using rule 93 ($@32)
+
+    $@32  go to state 77
+
+
+State 85
+
+  108 Exp: Incremento Exp .
+
+    $default  reduce using rule 108 (Exp)
+
+
+State 86
+
+  110 Exp: Entidade Exp .
+
+    $default  reduce using rule 110 (Exp)
+
+
+State 87
+
+  106 Exp: ExprMat Exp .
+
+    $default  reduce using rule 106 (Exp)
+
+
+State 88
+
+  107 Exp: ExprBool Exp .
+
+    $default  reduce using rule 107 (Exp)
+
+
+State 89
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List . ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    ')'  shift, and go to state 107
+
+
+State 90
+
+   41 Var_List: LIST '<' Simple_Type '>' . IDENTIFIER '[' INT_LITERAL ']' ';' $@17 Var_List
+
+    IDENTIFIER  shift, and go to state 108
+
+
+State 91
+
+   15 Message: MESSAGE IDENTIFIER '{' Var_List '}' ';' $@5 . Message
+
+    MESSAGE  shift, and go to state 7
+
+    $default  reduce using rule 13 (Message)
+
+    Message  go to state 109
+
+
+State 92
+
+  120 SetMsg: IDENTIFIER POINTER IDENTIFIER .
+  122 Entidade: IDENTIFIER POINTER IDENTIFIER . '(' $@39 ExpList ')'
+
+    '('  shift, and go to state 110
+
+    $default  reduce using rule 120 (SetMsg)
+
+
+State 93
+
+  119 List_Func: IDENTIFIER '.' BACK . '(' ')'
+
+    '('  shift, and go to state 111
+
+
+State 94
+
+  118 List_Func: IDENTIFIER '.' FRONT . '(' ')'
+
+    '('  shift, and go to state 112
+
+
+State 95
+
+  117 List_Func: IDENTIFIER '.' NEXT . '(' ')'
+
+    '('  shift, and go to state 113
+
+
+State 96
+
+  116 List_Func: IDENTIFIER '.' SIZE . '(' ')'
+
+    '('  shift, and go to state 114
+
+
+State 97
+
+  115 List_Func: IDENTIFIER '.' INSERT . $@38 '(' Exp ')'
+
+    $default  reduce using rule 114 ($@38)
+
+    $@38  go to state 115
+
+
+State 98
+
+   92 Exp: IDENTIFIER '.' $@31 . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 116
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 99
+
+   45 Var: IDENTIFIER $@18 ',' . Var
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 48
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    '='       reduce using rule 90 (Exp)
+    $default  reduce using rule 42 (Var)
+
+    Var         go to state 117
+    Assignment  go to state 58
+    Exp         go to state 59
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 100
+
+   94 Exp: IDENTIFIER $@32 Exp .
+
+    $default  reduce using rule 94 (Exp)
+
+
+State 101
+
+   96 Exp: STR_LITERAL $@33 Exp .
+
+    $default  reduce using rule 96 (Exp)
+
+
+State 102
+
+   98 Exp: INT_LITERAL $@34 Exp .
+
+    $default  reduce using rule 98 (Exp)
+
+
+State 103
+
+  100 Exp: REAL_LITERAL $@35 Exp .
+
+    $default  reduce using rule 100 (Exp)
+
+
+State 104
+
+  133 ExpList: Exp .
+  135        | Exp . ',' $@40 ExpList
+  136        | Exp . ';'
+
+    ';'  shift, and go to state 118
+    ','  shift, and go to state 119
+
+    $default  reduce using rule 133 (ExpList)
+
+
+State 105
+
+  105 Exp: '(' $@36 ExpList . ')' $@37 Exp
+
+    ')'  shift, and go to state 120
+
+
+State 106
+
+   89 Assignment: Exp '=' $@30 . Exp ';'
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 121
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 107
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' . '{' IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    '{'  shift, and go to state 122
+
+
+State 108
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER . '[' INT_LITERAL ']' ';' $@17 Var_List
+
+    '['  shift, and go to state 123
+
+
+State 109
+
+   15 Message: MESSAGE IDENTIFIER '{' Var_List '}' ';' $@5 Message .
+
+    $default  reduce using rule 15 (Message)
+
+
+State 110
+
+  122 Entidade: IDENTIFIER POINTER IDENTIFIER '(' . $@39 ExpList ')'
+
+    $default  reduce using rule 121 ($@39)
+
+    $@39  go to state 124
+
+
+State 111
+
+  119 List_Func: IDENTIFIER '.' BACK '(' . ')'
+
+    ')'  shift, and go to state 125
+
+
+State 112
+
+  118 List_Func: IDENTIFIER '.' FRONT '(' . ')'
+
+    ')'  shift, and go to state 126
+
+
+State 113
+
+  117 List_Func: IDENTIFIER '.' NEXT '(' . ')'
+
+    ')'  shift, and go to state 127
+
+
+State 114
+
+  116 List_Func: IDENTIFIER '.' SIZE '(' . ')'
+
+    ')'  shift, and go to state 128
+
+
+State 115
+
+  115 List_Func: IDENTIFIER '.' INSERT $@38 . '(' Exp ')'
+
+    '('  shift, and go to state 129
+
+
+State 116
+
+   92 Exp: IDENTIFIER '.' $@31 Exp .
+
+    $default  reduce using rule 92 (Exp)
+
+
+State 117
+
+   45 Var: IDENTIFIER $@18 ',' Var .
+
+    $default  reduce using rule 45 (Var)
+
+
+State 118
+
+  136 ExpList: Exp ';' .
+
+    $default  reduce using rule 136 (ExpList)
+
+
+State 119
+
+  135 ExpList: Exp ',' . $@40 ExpList
+
+    $default  reduce using rule 134 ($@40)
+
+    $@40  go to state 130
+
+
+State 120
+
+  105 Exp: '(' $@36 ExpList ')' . $@37 Exp
+
+    $default  reduce using rule 104 ($@37)
+
+    $@37  go to state 131
+
+
+State 121
+
+   89 Assignment: Exp '=' $@30 Exp . ';'
+
+    ';'  shift, and go to state 132
+
+
+State 122
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' . IdentMsg Const_List Var_List $@9 StateDef '}'
+
+    IDENTIFIER  shift, and go to state 133
+
+    $default  reduce using rule 16 (IdentMsg)
+
+    IdentMsg  go to state 134
+
+
+State 123
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' . INT_LITERAL ']' ';' $@17 Var_List
+
+    INT_LITERAL  shift, and go to state 135
+
+
+State 124
+
+  122 Entidade: IDENTIFIER POINTER IDENTIFIER '(' $@39 . ExpList ')'
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 104
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+    ExpList     go to state 136
+
+
+State 125
+
+  119 List_Func: IDENTIFIER '.' BACK '(' ')' .
+
+    $default  reduce using rule 119 (List_Func)
+
+
+State 126
+
+  118 List_Func: IDENTIFIER '.' FRONT '(' ')' .
+
+    $default  reduce using rule 118 (List_Func)
+
+
+State 127
+
+  117 List_Func: IDENTIFIER '.' NEXT '(' ')' .
+
+    $default  reduce using rule 117 (List_Func)
+
+
+State 128
+
+  116 List_Func: IDENTIFIER '.' SIZE '(' ')' .
+
+    $default  reduce using rule 116 (List_Func)
+
+
+State 129
+
+  115 List_Func: IDENTIFIER '.' INSERT $@38 '(' . Exp ')'
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 137
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 130
+
+  135 ExpList: Exp ',' $@40 . ExpList
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 104
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+    ExpList     go to state 138
+
+
+State 131
+
+  105 Exp: '(' $@36 ExpList ')' $@37 . Exp
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 139
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 132
+
+   89 Assignment: Exp '=' $@30 Exp ';' .
+
+    $default  reduce using rule 89 (Assignment)
+
+
+State 133
+
+   19 IdentMsg: IDENTIFIER . IDENTIFIER ';' $@6 $@7 IdentMsg
+
+    IDENTIFIER  shift, and go to state 140
+
+
+State 134
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg . Const_List Var_List $@9 StateDef '}'
+
+    CONST  shift, and go to state 141
+
+    $default  reduce using rule 31 (Const_List)
+
+    Const_List  go to state 142
+
+
+State 135
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL . ']' ';' $@17 Var_List
+
+    ']'  shift, and go to state 143
+
+
+State 136
+
+  122 Entidade: IDENTIFIER POINTER IDENTIFIER '(' $@39 ExpList . ')'
+
+    ')'  shift, and go to state 144
+
+
+State 137
+
+  115 List_Func: IDENTIFIER '.' INSERT $@38 '(' Exp . ')'
+
+    ')'  shift, and go to state 145
+
+
+State 138
+
+  135 ExpList: Exp ',' $@40 ExpList .
+
+    $default  reduce using rule 135 (ExpList)
+
+
+State 139
+
+  105 Exp: '(' $@36 ExpList ')' $@37 Exp .
+
+    $default  reduce using rule 105 (Exp)
+
+
+State 140
+
+   19 IdentMsg: IDENTIFIER IDENTIFIER . ';' $@6 $@7 IdentMsg
+
+    ';'  shift, and go to state 146
+
+
+State 141
+
+   33 Const_List: CONST . IDENTIFIER '=' INT_LITERAL ';' $@14 Const_List
+   35           | CONST . IDENTIFIER '=' REAL_LITERAL ';' $@15 Const_List
+   37           | CONST . IDENTIFIER '=' STR_LITERAL ';' $@16 Const_List
+
+    IDENTIFIER  shift, and go to state 147
+
+
+State 142
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List . Var_List $@9 StateDef '}'
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+    LIST     shift, and go to state 31
+
+    $default  reduce using rule 38 (Var_List)
+
+    Var_List     go to state 148
+    Simple_Type  go to state 33
+
+
+State 143
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' . ';' $@17 Var_List
+
+    ';'  shift, and go to state 149
+
+
+State 144
+
+  122 Entidade: IDENTIFIER POINTER IDENTIFIER '(' $@39 ExpList ')' .
+
+    $default  reduce using rule 122 (Entidade)
+
+
+State 145
+
+  115 List_Func: IDENTIFIER '.' INSERT $@38 '(' Exp ')' .
+
+    $default  reduce using rule 115 (List_Func)
+
+
+State 146
+
+   19 IdentMsg: IDENTIFIER IDENTIFIER ';' . $@6 $@7 IdentMsg
+
+    $default  reduce using rule 17 ($@6)
+
+    $@6  go to state 150
+
+
+State 147
+
+   33 Const_List: CONST IDENTIFIER . '=' INT_LITERAL ';' $@14 Const_List
+   35           | CONST IDENTIFIER . '=' REAL_LITERAL ';' $@15 Const_List
+   37           | CONST IDENTIFIER . '=' STR_LITERAL ';' $@16 Const_List
+
+    '='  shift, and go to state 151
+
+
+State 148
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List . $@9 StateDef '}'
+
+    $default  reduce using rule 21 ($@9)
+
+    $@9  go to state 152
+
+
+State 149
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' ';' . $@17 Var_List
+
+    $default  reduce using rule 40 ($@17)
+
+    $@17  go to state 153
+
+
+State 150
+
+   19 IdentMsg: IDENTIFIER IDENTIFIER ';' $@6 . $@7 IdentMsg
+
+    $default  reduce using rule 18 ($@7)
+
+    $@7  go to state 154
+
+
+State 151
+
+   33 Const_List: CONST IDENTIFIER '=' . INT_LITERAL ';' $@14 Const_List
+   35           | CONST IDENTIFIER '=' . REAL_LITERAL ';' $@15 Const_List
+   37           | CONST IDENTIFIER '=' . STR_LITERAL ';' $@16 Const_List
+
+    STR_LITERAL   shift, and go to state 155
+    INT_LITERAL   shift, and go to state 156
+    REAL_LITERAL  shift, and go to state 157
+
+
+State 152
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 . StateDef '}'
+
+    STATE  shift, and go to state 158
+
+    $default  reduce using rule 23 (StateDef)
+
+    StateDef  go to state 159
+
+
+State 153
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' ';' $@17 . Var_List
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+    LIST     shift, and go to state 31
+
+    $default  reduce using rule 38 (Var_List)
+
+    Var_List     go to state 160
+    Simple_Type  go to state 33
+
+
+State 154
+
+   19 IdentMsg: IDENTIFIER IDENTIFIER ';' $@6 $@7 . IdentMsg
+
+    IDENTIFIER  shift, and go to state 133
+
+    $default  reduce using rule 16 (IdentMsg)
+
+    IdentMsg  go to state 161
+
+
+State 155
+
+   37 Const_List: CONST IDENTIFIER '=' STR_LITERAL . ';' $@16 Const_List
+
+    ';'  shift, and go to state 162
+
+
+State 156
+
+   33 Const_List: CONST IDENTIFIER '=' INT_LITERAL . ';' $@14 Const_List
+
+    ';'  shift, and go to state 163
+
+
+State 157
+
+   35 Const_List: CONST IDENTIFIER '=' REAL_LITERAL . ';' $@15 Const_List
+
+    ';'  shift, and go to state 164
+
+
+State 158
+
+   27 StateDef: STATE . IDENTIFIER $@10 '(' Var_List ')' $@11 '{' ActionList '}' $@12 StateDef
+
+    IDENTIFIER  shift, and go to state 165
+
+
+State 159
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef . '}'
+
+    '}'  shift, and go to state 166
+
+
+State 160
+
+   41 Var_List: LIST '<' Simple_Type '>' IDENTIFIER '[' INT_LITERAL ']' ';' $@17 Var_List .
+
+    $default  reduce using rule 41 (Var_List)
+
+
+State 161
+
+   19 IdentMsg: IDENTIFIER IDENTIFIER ';' $@6 $@7 IdentMsg .
+
+    $default  reduce using rule 19 (IdentMsg)
+
+
+State 162
+
+   37 Const_List: CONST IDENTIFIER '=' STR_LITERAL ';' . $@16 Const_List
+
+    $default  reduce using rule 36 ($@16)
+
+    $@16  go to state 167
+
+
+State 163
+
+   33 Const_List: CONST IDENTIFIER '=' INT_LITERAL ';' . $@14 Const_List
+
+    $default  reduce using rule 32 ($@14)
+
+    $@14  go to state 168
+
+
+State 164
+
+   35 Const_List: CONST IDENTIFIER '=' REAL_LITERAL ';' . $@15 Const_List
+
+    $default  reduce using rule 34 ($@15)
+
+    $@15  go to state 169
+
+
+State 165
+
+   27 StateDef: STATE IDENTIFIER . $@10 '(' Var_List ')' $@11 '{' ActionList '}' $@12 StateDef
+
+    $default  reduce using rule 24 ($@10)
+
+    $@10  go to state 170
+
+
+State 166
+
+   22 Program: PROGRAM IDENTIFIER $@8 '(' Var_List ')' '{' IdentMsg Const_List Var_List $@9 StateDef '}' .
+
+    $default  reduce using rule 22 (Program)
+
+
+State 167
+
+   37 Const_List: CONST IDENTIFIER '=' STR_LITERAL ';' $@16 . Const_List
+
+    CONST  shift, and go to state 141
+
+    $default  reduce using rule 31 (Const_List)
+
+    Const_List  go to state 171
+
+
+State 168
+
+   33 Const_List: CONST IDENTIFIER '=' INT_LITERAL ';' $@14 . Const_List
+
+    CONST  shift, and go to state 141
+
+    $default  reduce using rule 31 (Const_List)
+
+    Const_List  go to state 172
+
+
+State 169
+
+   35 Const_List: CONST IDENTIFIER '=' REAL_LITERAL ';' $@15 . Const_List
+
+    CONST  shift, and go to state 141
+
+    $default  reduce using rule 31 (Const_List)
+
+    Const_List  go to state 173
+
+
+State 170
+
+   27 StateDef: STATE IDENTIFIER $@10 . '(' Var_List ')' $@11 '{' ActionList '}' $@12 StateDef
+
+    '('  shift, and go to state 174
+
+
+State 171
+
+   37 Const_List: CONST IDENTIFIER '=' STR_LITERAL ';' $@16 Const_List .
+
+    $default  reduce using rule 37 (Const_List)
+
+
+State 172
+
+   33 Const_List: CONST IDENTIFIER '=' INT_LITERAL ';' $@14 Const_List .
+
+    $default  reduce using rule 33 (Const_List)
+
+
+State 173
+
+   35 Const_List: CONST IDENTIFIER '=' REAL_LITERAL ';' $@15 Const_List .
+
+    $default  reduce using rule 35 (Const_List)
+
+
+State 174
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' . Var_List ')' $@11 '{' ActionList '}' $@12 StateDef
+
+    INTEGER  shift, and go to state 28
+    REAL     shift, and go to state 29
+    STRING   shift, and go to state 30
+    LIST     shift, and go to state 31
+
+    $default  reduce using rule 38 (Var_List)
+
+    Var_List     go to state 175
+    Simple_Type  go to state 33
+
+
+State 175
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List . ')' $@11 '{' ActionList '}' $@12 StateDef
+
+    ')'  shift, and go to state 176
+
+
+State 176
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' . $@11 '{' ActionList '}' $@12 StateDef
+
+    $default  reduce using rule 25 ($@11)
+
+    $@11  go to state 177
+
+
+State 177
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 . '{' ActionList '}' $@12 StateDef
+
+    '{'  shift, and go to state 178
+
+
+State 178
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 '{' . ActionList '}' $@12 StateDef
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 189
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 179
+
+   66 Send: SEND . '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    '('  shift, and go to state 203
+
+
+State 180
+
+   68 Recv: RECV . '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList '}'
+
+    '('  shift, and go to state 204
+
+
+State 181
+
+   65 Broadcast: BROADCAST . '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    '('  shift, and go to state 205
+
+
+State 182
+
+   64 Next_State: NEXT_STATE . State
+
+    EXIT        shift, and go to state 206
+    IDENTIFIER  shift, and go to state 207
+
+    State  go to state 208
+
+
+State 183
+
+   73 During: DURING . $@21 '(' Exp ')' $@22 During_Recv
+
+    $default  reduce using rule 71 ($@21)
+
+    $@21  go to state 209
+
+
+State 184
+
+   70 Recv: RECV_BROADCAST . '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList '}'
+
+    '('  shift, and go to state 210
+
+
+State 185
+
+   84 If: IF . $@27 '(' Exp ')' $@28 '{' ActionList '}'
+
+    $default  reduce using rule 82 ($@27)
+
+    $@27  go to state 211
+
+
+State 186
+
+   86 Else: ELSE . $@29 '{' ActionList '}'
+
+    $default  reduce using rule 85 ($@29)
+
+    $@29  go to state 212
+
+
+State 187
+
+   81 For: FOR . IDENTIFIER IN IDENTIFIER $@26 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 213
+
+
+State 188
+
+   79 While: WHILE . '(' $@24 Exp ')' $@25 '{' ActionList '}'
+
+    '('  shift, and go to state 214
+
+
+State 189
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 '{' ActionList . '}' $@12 StateDef
+
+    '}'  shift, and go to state 215
+
+
+State 190
+
+   52 ActionList: Action . ActionList
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 216
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 191
+
+   53 Action: Next_State .
+
+    $default  reduce using rule 53 (Action)
+
+
+State 192
+
+   54 Action: Broadcast .
+
+    $default  reduce using rule 54 (Action)
+
+
+State 193
+
+   55 Action: Send .
+
+    $default  reduce using rule 55 (Action)
+
+
+State 194
+
+   56 Action: Recv .
+
+    $default  reduce using rule 56 (Action)
+
+
+State 195
+
+   57 Action: During .
+
+    $default  reduce using rule 57 (Action)
+
+
+State 196
+
+   58 Action: While .
+
+    $default  reduce using rule 58 (Action)
+
+
+State 197
+
+   59 Action: For .
+
+    $default  reduce using rule 59 (Action)
+
+
+State 198
+
+   60 Action: If .
+
+    $default  reduce using rule 60 (Action)
+
+
+State 199
+
+   61 Action: Else .
+
+    $default  reduce using rule 61 (Action)
+
+
+State 200
+
+   63 Action: Method_call .
+
+    $default  reduce using rule 63 (Action)
+
+
+State 201
+
+   62 Action: Assignment .
+
+    $default  reduce using rule 62 (Action)
+
+
+State 202
+
+   87 Method_call: Exp . ';'
+   89 Assignment: Exp . '=' $@30 Exp ';'
+
+    ';'  shift, and go to state 217
+    '='  shift, and go to state 83
+
+
+State 203
+
+   66 Send: SEND '(' . IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 218
+
+
+State 204
+
+   68 Recv: RECV '(' . IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 219
+
+
+State 205
+
+   65 Broadcast: BROADCAST '(' . IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 220
+
+
+State 206
+
+   30 State: EXIT . ';'
+
+    ';'  shift, and go to state 221
+
+
+State 207
+
+   29 State: IDENTIFIER . $@13 '(' ExpList ')' ';'
+
+    $default  reduce using rule 28 ($@13)
+
+    $@13  go to state 222
+
+
+State 208
+
+   64 Next_State: NEXT_STATE State .
+
+    $default  reduce using rule 64 (Next_State)
+
+
+State 209
+
+   73 During: DURING $@21 . '(' Exp ')' $@22 During_Recv
+
+    '('  shift, and go to state 223
+
+
+State 210
+
+   70 Recv: RECV_BROADCAST '(' . IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 224
+
+
+State 211
+
+   84 If: IF $@27 . '(' Exp ')' $@28 '{' ActionList '}'
+
+    '('  shift, and go to state 225
+
+
+State 212
+
+   86 Else: ELSE $@29 . '{' ActionList '}'
+
+    '{'  shift, and go to state 226
+
+
+State 213
+
+   81 For: FOR IDENTIFIER . IN IDENTIFIER $@26 '{' ActionList '}'
+
+    IN  shift, and go to state 227
+
+
+State 214
+
+   79 While: WHILE '(' . $@24 Exp ')' $@25 '{' ActionList '}'
+
+    $default  reduce using rule 77 ($@24)
+
+    $@24  go to state 228
+
+
+State 215
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 '{' ActionList '}' . $@12 StateDef
+
+    $default  reduce using rule 26 ($@12)
+
+    $@12  go to state 229
+
+
+State 216
+
+   52 ActionList: Action ActionList .
+
+    $default  reduce using rule 52 (ActionList)
+
+
+State 217
+
+   87 Method_call: Exp ';' .
+
+    $default  reduce using rule 87 (Method_call)
+
+
+State 218
+
+   66 Send: SEND '(' IDENTIFIER . ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    ','  shift, and go to state 230
+
+
+State 219
+
+   68 Recv: RECV '(' IDENTIFIER . ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList '}'
+
+    ','  shift, and go to state 231
+
+
+State 220
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER . ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    ','  shift, and go to state 232
+
+
+State 221
+
+   30 State: EXIT ';' .
+
+    $default  reduce using rule 30 (State)
+
+
+State 222
+
+   29 State: IDENTIFIER $@13 . '(' ExpList ')' ';'
+
+    '('  shift, and go to state 233
+
+
+State 223
+
+   73 During: DURING $@21 '(' . Exp ')' $@22 During_Recv
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 234
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 224
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER . ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList '}'
+
+    ','  shift, and go to state 235
+
+
+State 225
+
+   84 If: IF $@27 '(' . Exp ')' $@28 '{' ActionList '}'
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 236
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 226
+
+   86 Else: ELSE $@29 '{' . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 237
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 227
+
+   81 For: FOR IDENTIFIER IN . IDENTIFIER $@26 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 238
+
+
+State 228
+
+   79 While: WHILE '(' $@24 . Exp ')' $@25 '{' ActionList '}'
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 239
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+
+
+State 229
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 '{' ActionList '}' $@12 . StateDef
+
+    STATE  shift, and go to state 158
+
+    $default  reduce using rule 23 (StateDef)
+
+    StateDef  go to state 240
+
+
+State 230
+
+   66 Send: SEND '(' IDENTIFIER ',' . IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 241
+
+
+State 231
+
+   68 Recv: RECV '(' IDENTIFIER ',' . IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 242
+
+
+State 232
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' . IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 243
+
+
+State 233
+
+   29 State: IDENTIFIER $@13 '(' . ExpList ')' ';'
+
+    TRUE_LITERAL   shift, and go to state 40
+    FALSE_LITERAL  shift, and go to state 41
+    DUPLO_IGUAL    shift, and go to state 42
+    DIFERENTE      shift, and go to state 43
+    '>'            shift, and go to state 44
+    '<'            shift, and go to state 45
+    MAIOR_IGUAL    shift, and go to state 46
+    MENOR_IGUAL    shift, and go to state 47
+    IDENTIFIER     shift, and go to state 84
+    STR_LITERAL    shift, and go to state 49
+    INT_LITERAL    shift, and go to state 50
+    REAL_LITERAL   shift, and go to state 51
+    '('            shift, and go to state 52
+    '+'            shift, and go to state 53
+    '-'            shift, and go to state 54
+    '*'            shift, and go to state 55
+    '/'            shift, and go to state 56
+
+    $default  reduce using rule 90 (Exp)
+
+    Exp         go to state 104
+    Incremento  go to state 60
+    List_Func   go to state 61
+    SetMsg      go to state 62
+    Entidade    go to state 63
+    ExprMat     go to state 64
+    ExprBool    go to state 65
+    ExpList     go to state 244
+
+
+State 234
+
+   73 During: DURING $@21 '(' Exp . ')' $@22 During_Recv
+
+    ')'  shift, and go to state 245
+
+
+State 235
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' . IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 246
+
+
+State 236
+
+   84 If: IF $@27 '(' Exp . ')' $@28 '{' ActionList '}'
+
+    ')'  shift, and go to state 247
+
+
+State 237
+
+   86 Else: ELSE $@29 '{' ActionList . '}'
+
+    '}'  shift, and go to state 248
+
+
+State 238
+
+   81 For: FOR IDENTIFIER IN IDENTIFIER . $@26 '{' ActionList '}'
+
+    $default  reduce using rule 80 ($@26)
+
+    $@26  go to state 249
+
+
+State 239
+
+   79 While: WHILE '(' $@24 Exp . ')' $@25 '{' ActionList '}'
+
+    ')'  shift, and go to state 250
+
+
+State 240
+
+   27 StateDef: STATE IDENTIFIER $@10 '(' Var_List ')' $@11 '{' ActionList '}' $@12 StateDef .
+
+    $default  reduce using rule 27 (StateDef)
+
+
+State 241
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER . ',' IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    ','  shift, and go to state 251
+
+
+State 242
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER . ',' IDENTIFIER ')' $@19 '{' ActionList '}'
+
+    ','  shift, and go to state 252
+
+
+State 243
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' IDENTIFIER . ',' IDENTIFIER ')' ';'
+
+    ','  shift, and go to state 253
+
+
+State 244
+
+   29 State: IDENTIFIER $@13 '(' ExpList . ')' ';'
+
+    ')'  shift, and go to state 254
+
+
+State 245
+
+   73 During: DURING $@21 '(' Exp ')' . $@22 During_Recv
+
+    $default  reduce using rule 72 ($@22)
+
+    $@22  go to state 255
+
+
+State 246
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER . ',' IDENTIFIER ')' $@20 '{' ActionList '}'
+
+    ','  shift, and go to state 256
+
+
+State 247
+
+   84 If: IF $@27 '(' Exp ')' . $@28 '{' ActionList '}'
+
+    $default  reduce using rule 83 ($@28)
+
+    $@28  go to state 257
+
+
+State 248
+
+   86 Else: ELSE $@29 '{' ActionList '}' .
+
+    $default  reduce using rule 86 (Else)
+
+
+State 249
+
+   81 For: FOR IDENTIFIER IN IDENTIFIER $@26 . '{' ActionList '}'
+
+    '{'  shift, and go to state 258
+
+
+State 250
+
+   79 While: WHILE '(' $@24 Exp ')' . $@25 '{' ActionList '}'
+
+    $default  reduce using rule 78 ($@25)
+
+    $@25  go to state 259
+
+
+State 251
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' . IDENTIFIER ',' IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 260
+
+
+State 252
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' . IDENTIFIER ')' $@19 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 261
+
+
+State 253
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' . IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 262
+
+
+State 254
+
+   29 State: IDENTIFIER $@13 '(' ExpList ')' . ';'
+
+    ';'  shift, and go to state 263
+
+
+State 255
+
+   73 During: DURING $@21 '(' Exp ')' $@22 . During_Recv
+
+    RECV            shift, and go to state 180
+    RECV_BROADCAST  shift, and go to state 184
+    '{'             shift, and go to state 264
+
+    Recv         go to state 265
+    During_Recv  go to state 266
+
+
+State 256
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' . IDENTIFIER ')' $@20 '{' ActionList '}'
+
+    IDENTIFIER  shift, and go to state 267
+
+
+State 257
+
+   84 If: IF $@27 '(' Exp ')' $@28 . '{' ActionList '}'
+
+    '{'  shift, and go to state 268
+
+
+State 258
+
+   81 For: FOR IDENTIFIER IN IDENTIFIER $@26 '{' . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 269
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 259
+
+   79 While: WHILE '(' $@24 Exp ')' $@25 . '{' ActionList '}'
+
+    '{'  shift, and go to state 270
+
+
+State 260
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER . ',' IDENTIFIER ')' ';'
+
+    ','  shift, and go to state 271
+
+
+State 261
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER . ')' $@19 '{' ActionList '}'
+
+    ')'  shift, and go to state 272
+
+
+State 262
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER . ')' ';'
+
+    ')'  shift, and go to state 273
+
+
+State 263
+
+   29 State: IDENTIFIER $@13 '(' ExpList ')' ';' .
+
+    $default  reduce using rule 29 (State)
+
+
+State 264
+
+   75 During_Recv: '{' . $@23 ActionList '}'
+
+    $default  reduce using rule 74 ($@23)
+
+    $@23  go to state 274
+
+
+State 265
+
+   76 During_Recv: Recv .
+
+    $default  reduce using rule 76 (During_Recv)
+
+
+State 266
+
+   73 During: DURING $@21 '(' Exp ')' $@22 During_Recv .
+
+    $default  reduce using rule 73 (During)
+
+
+State 267
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER . ')' $@20 '{' ActionList '}'
+
+    ')'  shift, and go to state 275
+
+
+State 268
+
+   84 If: IF $@27 '(' Exp ')' $@28 '{' . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 276
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 269
+
+   81 For: FOR IDENTIFIER IN IDENTIFIER $@26 '{' ActionList . '}'
+
+    '}'  shift, and go to state 277
+
+
+State 270
+
+   79 While: WHILE '(' $@24 Exp ')' $@25 '{' . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 278
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 271
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' . IDENTIFIER ')' ';'
+
+    IDENTIFIER  shift, and go to state 279
+
+
+State 272
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' . $@19 '{' ActionList '}'
+
+    $default  reduce using rule 67 ($@19)
+
+    $@19  go to state 280
+
+
+State 273
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' . ';'
+
+    ';'  shift, and go to state 281
+
+
+State 274
+
+   75 During_Recv: '{' $@23 . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 282
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 275
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' . $@20 '{' ActionList '}'
+
+    $default  reduce using rule 69 ($@20)
+
+    $@20  go to state 283
+
+
+State 276
+
+   84 If: IF $@27 '(' Exp ')' $@28 '{' ActionList . '}'
+
+    '}'  shift, and go to state 284
+
+
+State 277
+
+   81 For: FOR IDENTIFIER IN IDENTIFIER $@26 '{' ActionList '}' .
+
+    $default  reduce using rule 81 (For)
+
+
+State 278
+
+   79 While: WHILE '(' $@24 Exp ')' $@25 '{' ActionList . '}'
+
+    '}'  shift, and go to state 285
+
+
+State 279
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER . ')' ';'
+
+    ')'  shift, and go to state 286
+
+
+State 280
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 . '{' ActionList '}'
+
+    '{'  shift, and go to state 287
+
+
+State 281
+
+   65 Broadcast: BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';' .
+
+    $default  reduce using rule 65 (Broadcast)
+
+
+State 282
+
+   75 During_Recv: '{' $@23 ActionList . '}'
+
+    '}'  shift, and go to state 288
+
+
+State 283
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 . '{' ActionList '}'
+
+    '{'  shift, and go to state 289
+
+
+State 284
+
+   84 If: IF $@27 '(' Exp ')' $@28 '{' ActionList '}' .
+
+    $default  reduce using rule 84 (If)
+
+
+State 285
+
+   79 While: WHILE '(' $@24 Exp ')' $@25 '{' ActionList '}' .
+
+    $default  reduce using rule 79 (While)
+
+
+State 286
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' . ';'
+
+    ';'  shift, and go to state 290
+
+
+State 287
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 291
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 288
+
+   75 During_Recv: '{' $@23 ActionList '}' .
+
+    $default  reduce using rule 75 (During_Recv)
+
+
+State 289
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' . ActionList '}'
+
+    SEND            shift, and go to state 179
+    RECV            shift, and go to state 180
+    BROADCAST       shift, and go to state 181
+    NEXT_STATE      shift, and go to state 182
+    DURING          shift, and go to state 183
+    RECV_BROADCAST  shift, and go to state 184
+    IF              shift, and go to state 185
+    ELSE            shift, and go to state 186
+    FOR             shift, and go to state 187
+    WHILE           shift, and go to state 188
+    TRUE_LITERAL    shift, and go to state 40
+    FALSE_LITERAL   shift, and go to state 41
+    DUPLO_IGUAL     shift, and go to state 42
+    DIFERENTE       shift, and go to state 43
+    '>'             shift, and go to state 44
+    '<'             shift, and go to state 45
+    MAIOR_IGUAL     shift, and go to state 46
+    MENOR_IGUAL     shift, and go to state 47
+    IDENTIFIER      shift, and go to state 84
+    STR_LITERAL     shift, and go to state 49
+    INT_LITERAL     shift, and go to state 50
+    REAL_LITERAL    shift, and go to state 51
+    '('             shift, and go to state 52
+    '+'             shift, and go to state 53
+    '-'             shift, and go to state 54
+    '*'             shift, and go to state 55
+    '/'             shift, and go to state 56
+
+    '}'       reduce using rule 51 (ActionList)
+    $default  reduce using rule 90 (Exp)
+
+    ActionList   go to state 292
+    Action       go to state 190
+    Next_State   go to state 191
+    Broadcast    go to state 192
+    Send         go to state 193
+    Recv         go to state 194
+    During       go to state 195
+    While        go to state 196
+    For          go to state 197
+    If           go to state 198
+    Else         go to state 199
+    Method_call  go to state 200
+    Assignment   go to state 201
+    Exp          go to state 202
+    Incremento   go to state 60
+    List_Func    go to state 61
+    SetMsg       go to state 62
+    Entidade     go to state 63
+    ExprMat      go to state 64
+    ExprBool     go to state 65
+
+
+State 290
+
+   66 Send: SEND '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' ';' .
+
+    $default  reduce using rule 66 (Send)
+
+
+State 291
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList . '}'
+
+    '}'  shift, and go to state 293
+
+
+State 292
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList . '}'
+
+    '}'  shift, and go to state 294
+
+
+State 293
+
+   68 Recv: RECV '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@19 '{' ActionList '}' .
+
+    $default  reduce using rule 68 (Recv)
+
+
+State 294
+
+   70 Recv: RECV_BROADCAST '(' IDENTIFIER ',' IDENTIFIER ',' IDENTIFIER ')' $@20 '{' ActionList '}' .
+
+    $default  reduce using rule 70 (Recv)
