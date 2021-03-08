@@ -1,2 +1,0 @@
-
-Falta o pktGWannounce na entrada Max-Min
