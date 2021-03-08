@@ -2,6 +2,10 @@
 
 Implementation of DSL SLEDS-SD. A language aimed at the agile development of centered storage systems for wireless sensor networks.
 
+Development using SLEDS-SD is based on the state machine formalism.
+Thus, the specification of the application's execution flow must follow this formalism, which guarantees the quality of the code, in addition to promoting a high level of abstraction and reuse of code in other applications with similar execution flow.
+In this version, the SLEDS-SD compiler generates nesC codes for the TinyOS operating system.
+
 <center>
 <h2>Syntax of the SLEDS-SD language</h2>
 </cener>
