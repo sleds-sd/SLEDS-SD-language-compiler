@@ -2,7 +2,9 @@
 
 Implementation of DSL SLEDS-SD. A language aimed at the agile development of centered storage systems for wireless sensor networks.
 
+<center>
 <h2>Syntax of the SLEDS-SD language</h2>
+</cener>
 
 The syntax of the SLEDS-SD language is shown below. The language uses constructions similar to known programming languages, such as C, but it also includes terms related to the formal method used in the specification of systems, the state machine.
 
