@@ -23,4 +23,4 @@ To identify the types of messages, SLEDS-SD uses the MESSAGE TYPE. These identif
 The logical part of the application is started after the declaration of a new program, through PROGRAM. A program declaration has an identifier and a list of variables as a parameter. Then, the application constants are declared through CONST, which stores a literal value for an identifier. Then, the variables are declared, which can be of the type integer (INT), real (REAL), string (STRING), boolean (BOLL) and list (LIST).
 
 The execution of the application takes place within blocks of logical code, called states. To declare a state, STATE is used, accompanied by the state identifier, a list of variables as a parameter and a list of actions.
-Grammar expressions involve method calls, the logical part of repetition and conditional loops, and list-linked functions
+Grammar expressions involve method calls, the logical part of repetition and conditional loops, and list-linked functions.
